@@ -1,0 +1,42 @@
+# Git & Version Control
+.git
+.gitignore
+.gitattributes
+
+# Documentation
+README.md
+LICENSE
+*.md
+
+# CI/CD Workflows
+.github/
+
+# IDE & OS Metadata
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Credentials & Local Secrets
+.env
+.env.*
+*.pem
+*.key
+*.pub
+id_rsa*
+id_ed25519*
+secrets/
+
+# Build Output & Disk Images
+*.iso
+*.qcow2
+*.raw
+*.vmdk
+output/
+build/
+
+# Temporary & Log Files
+*.log
+tmp/
+temp/
+.cache/

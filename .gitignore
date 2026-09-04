@@ -1,0 +1,43 @@
+# Operating System Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Editors & IDEs
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+*.bak
+
+# Environment & Secrets
+.env
+.env.*
+*.pem
+*.key
+*.pub
+id_rsa*
+id_ed25519*
+secrets/
+
+# Disk Images & Bootc Builder Output
+*.iso
+*.qcow2
+*.raw
+*.vmdk
+*.vhdx
+*.tar
+*.tar.gz
+output/
+build/
+
+# Logs & Temporary Files
+*.log
+tmp/
+temp/
+.cache/
