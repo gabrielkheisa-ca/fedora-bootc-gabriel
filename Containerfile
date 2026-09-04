@@ -1,4 +1,4 @@
-FROM quay.io/fedora/fedora-bootc:44
+FROM quay.io/fedora/fedora-bootc:40
 
 # Install required packages
 RUN dnf -y install \
@@ -7,14 +7,14 @@ RUN dnf -y install \
     fastfetch \
     && dnf clean all
 
-# Enable sshd
+# Enable sshd service
 RUN systemctl enable sshd.service
 
-# Declare ARG AFTER 'FROM' so it's in scope for the build
+# Declare build argument for SSH key
 ARG SSH_PUB_KEY
 
-# Inject key safely using printf
-RUN mkdir -p /root/.ssh && \
-    chmod 700 /root/.ssh && \
-    printf "%s\n" "$SSH_PUB_KEY" > /root/.ssh/authorized_keys && \
-    chmod 600 /root/.ssh/authorized_keys
+# Target /var/roothome/.ssh directly to accommodate bootc's symlinked /root
+RUN mkdir -p /var/roothome/.ssh && \
+    chmod 700 /var/roothome/.ssh && \
+    printf "%s\n" "$SSH_PUB_KEY" > /var/roothome/.ssh/authorized_keys && \
+    chmod 600 /var/roothome/.ssh/authorized_keys
