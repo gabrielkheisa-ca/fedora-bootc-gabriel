@@ -7,12 +7,14 @@ RUN dnf -y install \
     fastfetch \
     && dnf clean all
 
-# Configure sshd service to start on boot
+# Enable sshd
 RUN systemctl enable sshd.service
 
-# Inject SSH Public Key for root user
+# Declare ARG AFTER 'FROM' so it's in scope for the build
 ARG SSH_PUB_KEY
+
+# Inject key safely using printf
 RUN mkdir -p /root/.ssh && \
     chmod 700 /root/.ssh && \
-    echo "${SSH_PUB_KEY}" > /root/.ssh/authorized_keys && \
+    printf "%s\n" "$SSH_PUB_KEY" > /root/.ssh/authorized_keys && \
     chmod 600 /root/.ssh/authorized_keys
