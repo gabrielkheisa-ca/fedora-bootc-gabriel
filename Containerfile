@@ -2,7 +2,7 @@ FROM quay.io/fedora/fedora-coreos:stable
 
 ARG SSH_PUB_KEY
 
-# 1. Install desktop environment, Chromium, xRDP, and explicit Xfce core packages
+# 1. Install extra tools, Chromium, xRDP, and explicit Xfce desktop components
 RUN dnf -y install \
     podman \
     fastfetch \
@@ -19,7 +19,7 @@ RUN dnf -y install \
     xfce4-terminal \
     && dnf clean all
 
-# 2. Configure DBus-wrapped Xfce startup session for system, core, and root
+# 2. Configure DBus-wrapped Xfce startup session for system defaults, core, and root
 RUN printf '#!/bin/bash\nexport XDG_SESSION_TYPE=x11\nexport XDG_CURRENT_DESKTOP=XFCE\nexport DESKTOP_SESSION=xfce\nif [ -f /usr/bin/dbus-run-session ]; then\n  exec dbus-run-session startxfce4\nelse\n  exec startxfce4\nfi\n' > /etc/skel/.Xclients && \
     chmod +x /etc/skel/.Xclients && \
     mkdir -p /var/home/core && \
@@ -29,10 +29,10 @@ RUN printf '#!/bin/bash\nexport XDG_SESSION_TYPE=x11\nexport XDG_CURRENT_DESKTOP
     cp /etc/skel/.Xclients /var/roothome/.Xclients && \
     chmod +x /var/roothome/.Xclients
 
-# 3. Fix xRDP PAM configuration (remove obsolete pam_lastlog.so from Fedora)
+# 3. Fix xRDP PAM configuration (remove obsolete pam_lastlog.so module reference)
 RUN sed -i '/pam_lastlog.so/d' /etc/pam.d/xrdp-sesman
 
-# 4. Safely configure firewall port 3389
+# 4. Safely configure firewall port 3389 using firewalld offline utility
 RUN firewall-offline-cmd --add-port=3389/tcp
 
 # 5. Enable xRDP systemd services on boot
@@ -48,7 +48,7 @@ RUN mkdir -p /var/home/core/.ssh /var/roothome/.ssh && \
     fi && \
     chown -R 1000:1000 /var/home/core
 
-# 7. Set password and unlock accounts securely via BuildKit secret mount
+# 7. Set password and unlock core & root accounts securely via BuildKit secret mount
 RUN --mount=type=secret,id=ROOT_PASSWORD \
     if [ -f /run/secrets/ROOT_PASSWORD ]; then \
         PASS=$(tr -d '\r\n' < /run/secrets/ROOT_PASSWORD); \
