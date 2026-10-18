@@ -24,6 +24,7 @@ Thumbs.db
 id_rsa*
 id_ed25519*
 secrets/
+!.env.example
 
 # Disk Images & Bootc Builder Output
 *.iso

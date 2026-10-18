@@ -35,7 +35,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and push Container image
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: .
           file: ./Containerfile
@@ -43,3 +43,5 @@ jobs:
           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
           build-args: |
             SSH_PUB_KEY=${{ secrets.SSH_PUB_KEY }}
+          secrets: |
+            ROOT_PASSWORD=${{ secrets.ROOT_PASSWORD }}
